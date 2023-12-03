@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{44df25f3-6599-4778-919e-c052c3959a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventHandler">
+      <UniqueIdentifier>{7e33569c-ab25-463f-b6d4-11c37602e69f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{9cd07204-6db9-4159-97bd-4cb4e5e362e9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
