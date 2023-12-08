@@ -1,13 +1,8 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include "Game.h"
 
 int main(int argc, char** argv) {
-	SDL_Init(SDL_INIT_VIDEO);
-	IMG_Init(IMG_INIT_PNG);
-	TTF_Init();
-
-	SDL_Delay(3000);
-	SDL_Quit();
+	Game::GetInstance()->Init();
+	Game::GetInstance()->Play();
+	Game::GetInstance()->Clean();
 	return 0;
 }
