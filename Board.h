@@ -17,13 +17,8 @@ enum class LEVEL
 
 constexpr int NUMBER_OF_RECORDS = 100;
 
-// 81 = 9*9 square per record, x2 for mask
-constexpr int RECORD_SIZE = 2 * BOARD_SIZE * BOARD_SIZE;
-
-const std::string EASY_FILE_PATH = "easy_database.txt";
-const std::string MEDIUM_FILE_PATH = "medium_database.txt";
-const std::string HARD_FILE_PATH = "hard_database.txt";
-const std::string EXTREME_FILE_PATH = "extreme_database.txt";
+// 81 = 9*9 square per record, x2 for mask + 1 for end of line
+constexpr int RECORD_SIZE = 2 * BOARD_SIZE * BOARD_SIZE + 1;
 
 constexpr int BOARD_SIZE_IN_PX = 600;
 constexpr int BORDER_SIZE_IN_PX = BOARD_SIZE_IN_PX / 100;
@@ -38,8 +33,8 @@ private:
 public:	
 	bool Init(LEVEL level);
 	bool LoadData(LEVEL level);
-	void Draw();
-	void Update(const int& mouseX, const int& mouseY) const;
+	void Draw() override;
+	void Update(SDL_Event event) const;
 };
 
 

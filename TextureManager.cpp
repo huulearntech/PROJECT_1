@@ -1,20 +1,30 @@
-#include "TextureManager.h"
-#include "Game.h"
 
+#include "TextureManager.h"
+
+// SDL_image.h for rendering all images, icons
+#include "SDL_image.h"
+
+// Game.h for Renderer usage
+#include "Game.h"
 
 TextureManager* TextureManager::s_Instance = nullptr;
 
+// Initialization
 bool TextureManager::Init()
 {
     int flags = IMG_INIT_JPG | IMG_INIT_PNG ;
     IMG_Init(flags);
     if ((flags & IMG_Init(flags)) != flags) {
-        printf("Failed initialize TextureManager: %s, at location: %s\n", SDL_GetError(), __FILE__);
+        printf("Failed initialize TextureManager: %s, at location: %s\n", IMG_GetError(), __FILE__);
         return false;
     }
+
+    TextureManager::LoadNumbers();
+
     return true;
 }
 
+// Load textures of icons
 bool TextureManager::Load(std::string textureId, std::string filename)
 {
     SDL_Surface* surface = IMG_Load(filename.c_str());
@@ -35,33 +45,59 @@ bool TextureManager::Load(std::string textureId, std::string filename)
     return true;
 }
 
+// Load all numbers of categories: const, correct, wrong
+void TextureManager::LoadNumbers()
+{
+    SDL_Surface* surface = nullptr;
+    SDL_Texture* texture = nullptr;
+    std::string textureID = "";
+    for (int i = 1; i <= 9; i++) {
+        textureID = "const_" + std::to_string(i);
+        surface = IMG_Load((textureID + ".png").c_str());
+        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
+        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
+    }
+
+    for (int i = 1; i <= 9; i++) {
+        textureID = "correct_" + std::to_string(i);
+        surface = IMG_Load((textureID + ".png").c_str());
+        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
+        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
+    }
+    
+    for (int i = 1; i <= 9; i++) {
+        textureID = "wrong_" + std::to_string(i);
+        surface = IMG_Load((textureID + ".png").c_str());
+        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
+        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
+    }
+    SDL_FreeSurface(surface);
+}
+
+// Draw numbers, icons
 void TextureManager::Draw(std::string textureId, SDL_Rect destRect)
 {
-    SDL_Rect srcRect = { 0, 0, 0, 0 };
-    SDL_QueryTexture(TextureManager::GetInstance()->m_TextureMap[textureId], NULL, NULL, &(srcRect.w), &(srcRect.h));
-    SDL_RenderCopy(Game::GetInstance()->GetRenderer(), m_TextureMap[textureId], &srcRect, &destRect);
+    SDL_RenderCopy(Game::GetInstance()->GetRenderer(), m_TextureMap[textureId], nullptr, &destRect);
 }
 
-void TextureManager::Drop(std::string textureId)
+// Draw backgrounds
+void TextureManager::Draw(SDL_Color color, SDL_Rect destRect)
 {
-    SDL_DestroyTexture(m_TextureMap[textureId]);
-    m_TextureMap.erase(textureId);
+    SDL_SetRenderDrawColor(Game::GetInstance()->GetRenderer(), color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(Game::GetInstance()->GetRenderer(), &destRect);
 }
 
+// Free resources
 void TextureManager::Clean()
 {
+    // Free all textures
     std::map<std::string, SDL_Texture*>::iterator it;
     for (it = m_TextureMap.begin(); it != m_TextureMap.end(); it++) {
         SDL_DestroyTexture(it->second);
     }
     m_TextureMap.clear();
     printf("All textures cleaned!");
-}
 
-SDL_Texture* TextureManager::GetTexture(std::string textureID)
-{
-    if (m_TextureMap.find(textureID) != m_TextureMap.end()) {
-        return m_TextureMap[textureID];
-    }
-    return nullptr;
+    // Free IMG
+    IMG_Quit();
 }

@@ -7,19 +7,18 @@
 class BaseObject
 {
 protected:
-	std::string m_TextureID;
 	SDL_Rect m_Rect;
 
 public:
-	BaseObject(std::string textureID, SDL_Rect rect) {
-		m_TextureID = textureID;
+	BaseObject(SDL_Rect rect) {
 		m_Rect = rect;
 	}
 
-	void SetRect(const int& x, const int& y) { m_Rect.x = x; m_Rect.y = y; }
+	void SetRect(SDL_Rect rect) { m_Rect = rect; }
 	SDL_Rect GetRect() const { return m_Rect; }
 	bool MouseIsWithin(const int& x, const int& y) const;
-	void Draw() const;
+	
+	virtual void Draw() = 0;
 };
 
 #endif // !BASE_OBJECT_H_

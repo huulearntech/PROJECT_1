@@ -139,7 +139,6 @@
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,10 +148,11 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="correct_5.png" />
+    <Image Include="const_6.png" />
     <Image Include="SudokuBKG.png" />
     <Image Include="SudokuBoard.png" />
     <Image Include="sudoku_icon.bmp" />

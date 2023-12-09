@@ -6,7 +6,8 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "EventHandler.h"
-#include "Board.h"
+#include "Button.h"
+#include "Box.h"
 
 Game* Game::s_Instance = nullptr;
 
@@ -25,7 +26,6 @@ bool Game::Init()
         GAME_HEIGHT,                                        // 640 BY DEFAULT
         SDL_WINDOW_MAXIMIZED
         // | SDL_WINDOW_RESIZABLE                           // WINDOW FLAGS, SEE SDL_WINDOW_FLAGS
-        // | SDL_WINDOW_SHOWN
     );
 
     if (m_Window == nullptr) {
@@ -40,6 +40,7 @@ bool Game::Init()
 
     if (m_Renderer == nullptr) {
         SDL_Log("Error initializing Game Renderer: %s; at location %s", SDL_GetError(), __FILE__);
+        return false;
     }
 
     SDL_Surface* icon = SDL_LoadBMP("sudoku_icon.bmp");
@@ -56,16 +57,31 @@ bool Game::Init()
         return false;
     }
 
-    TextureManager::GetInstance()->Load("board", "SudokuBoard.png");
     return m_IsRunning = true;
 }
 
 void Game::Play()
 {
-    while (IsRunning()) {
-        HandleEvents();
-        Update();
-        Render();
+    Button* button = new Button({ 100, 100, 100, 100 });
+    Box* box = new Box({ 200, 200, 100, 100 }, 6, 6);
+
+    SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+    SDL_RenderClear(m_Renderer);
+
+    while (Game::IsRunning()) {
+        //Game::HandleEvents();
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                Game::GetInstance()->Close();
+            }
+            button->HandleEvent(event);
+            button->Draw();
+            box->HandleEvent(event);
+            box->Draw();
+            Game::Update();
+            Game::Render();
+        }
     }
 }
 
@@ -84,8 +100,8 @@ void Game::Update()
 
 void Game::Render()
 {
-    SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
-    SDL_RenderClear(m_Renderer);
+    //SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+    //SDL_RenderClear(m_Renderer);
     //Here means do something with renderer base on Event
     //Board::Draw();
     SDL_RenderPresent(m_Renderer);
@@ -102,6 +118,5 @@ void Game::Clean()
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
 
-    IMG_Quit();
     SDL_Quit();
 }

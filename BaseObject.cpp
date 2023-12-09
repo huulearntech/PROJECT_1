@@ -1,15 +1,12 @@
 #include "BaseObject.h"
-#include "TextureManager.h"
 
 bool BaseObject::MouseIsWithin(const int& x, const int& y) const
 {
-	return x > m_Rect.x
-		&& x < m_Rect.x + m_Rect.w
-		&& y > m_Rect.y
-		&& y < m_Rect.y + m_Rect.h;
+	if (x < m_Rect.x) return false;
+	if (x > m_Rect.x + m_Rect.w) return false;
+	if (y < m_Rect.y) return false;
+	if (y > m_Rect.y + m_Rect.h) return false;
+	
+	return true;
 }
 
-void BaseObject::Draw() const
-{
-	TextureManager::GetInstance()->Draw(m_TextureID, m_Rect);
-}

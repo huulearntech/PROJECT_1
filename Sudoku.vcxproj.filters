@@ -14,14 +14,15 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Board.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Box.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">
@@ -53,9 +54,6 @@
     <ClInclude Include="Box.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -71,6 +69,12 @@
       <Filter>Images</Filter>
     </Image>
     <Image Include="SudokuBKG.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="correct_5.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="const_6.png">
       <Filter>Images</Filter>
     </Image>
   </ItemGroup>

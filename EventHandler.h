@@ -4,7 +4,6 @@
 #define EVENTHANDLER_H_
 
 #include "SDL.h"
-#include "Box.h"
 
 struct Mouse
 {
@@ -24,8 +23,7 @@ public:
 	void Listen();
 	Mouse* GetMouse() { return m_Mouse; }
 	bool GetKeyDown(SDL_Scancode key);
-	bool CursorIsWithin(BaseObject* object);
-	void Hovering(Box* box);
+	SDL_Event m_Event;
 
 private:
 	EventHandler();
@@ -34,8 +32,7 @@ private:
 
 	void MouseTrack();
 	void KeyDown();
-	void LeftMouseClicked();
-	void LeftMouseClicked(Box* dest, Box* src);
+	void LeftMouseDown();
 
 	const Uint8* m_KeyStates;
 	static EventHandler* s_Instance;

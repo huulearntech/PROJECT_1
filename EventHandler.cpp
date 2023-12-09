@@ -1,6 +1,6 @@
 #include "EventHandler.h"
 #include "Game.h"
-#include "TextureManager.h"
+#include "Button.h"
 
 
 EventHandler* EventHandler::s_Instance = nullptr;
@@ -13,9 +13,9 @@ EventHandler::EventHandler() {
 
 void EventHandler::Listen()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		switch (event.type)
+	//SDL_Event event;
+	while (SDL_PollEvent(&m_Event)) {
+		switch (m_Event.type)
 		{
 			case SDL_QUIT:
 				Game::GetInstance()->Close();
@@ -27,8 +27,8 @@ void EventHandler::Listen()
 				MouseTrack();
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				if (event.button.button == SDL_BUTTON_LEFT) {
-					LeftMouseClicked();
+				if (m_Event.button.button == SDL_BUTTON_LEFT) {
+					LeftMouseDown();
 				}
 				break;
 			default:
@@ -43,14 +43,10 @@ void EventHandler::MouseTrack()
 	printf("X: %d, Y: %d\n", m_Mouse->X, m_Mouse->Y);
 }
 
-void EventHandler::LeftMouseClicked()
+void EventHandler::LeftMouseDown()
 {
 	printf("Left Mouse Clicked\n");
 
-}
-
-void EventHandler::LeftMouseClicked(Box* dest, Box* src)
-{
 }
 
 bool EventHandler::GetKeyDown(SDL_Scancode key)
@@ -61,13 +57,6 @@ bool EventHandler::GetKeyDown(SDL_Scancode key)
 	return false;
 }
 
-bool EventHandler::CursorIsWithin(BaseObject* object)
-{
-	return EventHandler::GetInstance()->GetMouse()->X > object->GetRect().x
-		&& EventHandler::GetInstance()->GetMouse()->X < object->GetRect().x + object->GetRect().w
-		&& EventHandler::GetInstance()->GetMouse()->Y > object->GetRect().y
-		&& EventHandler::GetInstance()->GetMouse()->Y < object->GetRect().y + object->GetRect().h;
-}
 
 void EventHandler::KeyDown() {
 	m_KeyStates = SDL_GetKeyboardState(nullptr);

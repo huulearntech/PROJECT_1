@@ -2,28 +2,26 @@
 #ifndef BOX_H_
 #define BOX_H_
 
-#include "BaseObject.h"
+#include "Button.h"
 
 
-class Box : public BaseObject
+class Box : public Button
 {
 private:
 	int m_Number;
 	int m_CorrectNumber;
-	bool m_IsClicked;
+	bool m_IsConst;
 
 public:
-	Box(std::string textureID, SDL_Rect rect, int number, int correctNumber) : BaseObject(textureID, rect) {
+	Box(SDL_Rect rect, int number, int correctNumber) : Button(rect) {
 		m_Number = number;
 		m_CorrectNumber = correctNumber;
-		m_IsClicked = false;
+		m_IsConst = (number == correctNumber && number != 0);
 	}
 
 	bool IsCorrect() const { return m_Number == m_CorrectNumber; }
 	bool SetNumber(int number);
-	void SetClicked(bool isClicked) { m_IsClicked = isClicked; }
-	bool IsClicked() const { return m_IsClicked; }
-	void Draw() const;
+	void Draw();
 };
 
 #endif // !BOX_H_

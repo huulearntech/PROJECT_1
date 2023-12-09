@@ -4,8 +4,7 @@
 #define TEXTUREMANAGER_H_
 
 #include <stdio.h>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "SDL.h"
 #include <string>
 #include <map>
 
@@ -16,12 +15,10 @@ public:
 	
 	bool Init();
 	bool Load(std::string textureId, std::string filename);
-	void Draw(std::string id, SDL_Rect destRect);
-	void Drop(std::string id);
+	void LoadNumbers();
+	void Draw(std::string textureId, SDL_Rect destRect);
+	void Draw(SDL_Color color, SDL_Rect destRect);
 	void Clean();
-
-	SDL_Texture* GetTexture(std::string textureID);
-
 
 private:
 	TextureManager() {}

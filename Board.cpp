@@ -1,14 +1,13 @@
-#include "Board.h"
-#include "TextureManager.h"
 #include "Game.h"
+#include "TextureManager.h"
+#include "Board.h"
 #include <random>
-
-
 
 
 bool Board::Init(LEVEL level)
 {
-	TextureManager::GetInstance()->Load("board", "SudokuBKG.png");
+	SDL_SetRenderDrawColor(Game::GetInstance()->GetRenderer(), BOARD_BKG.r, BOARD_BKG.g, BOARD_BKG.b, BOARD_BKG.a);
+	SDL_RenderFillRect(Game::GetInstance()->GetRenderer(), &m_Rect);
 
 	if (Board::LoadData(level) == false) { return false; }
 	Board::Draw();
@@ -22,16 +21,16 @@ bool Board::LoadData(LEVEL level)
 	switch (level)
 	{
 	case LEVEL::EASY:
-		filepath = EASY_FILE_PATH;
+		filepath = "easy_database.txt";
 		break;
 	case LEVEL::MEDIUM:
-		filepath = MEDIUM_FILE_PATH;
+		filepath = "medium_database.txt";
 		break;
 	case LEVEL::HARD:
-		filepath = HARD_FILE_PATH;
+		filepath = "hard_database.txt";
 		break;
 	case LEVEL::EXTREME:
-		filepath = EXTREME_FILE_PATH;
+		filepath = "extreme_database.txt";
 		break;
 	default:
 		break;
@@ -58,13 +57,13 @@ bool Board::LoadData(LEVEL level)
 				fptr = nullptr;
 				return false;
 			}
-			std::string textureID = "" + number;
 			SDL_Rect boxRect = {i * BOX_SIZE_IN_PX + ( i + 1 ) * BORDER_SIZE_IN_PX,
 								j * BOX_SIZE_IN_PX + ( j + 1 ) * BORDER_SIZE_IN_PX,
 								BOX_SIZE_IN_PX,
 								BOX_SIZE_IN_PX
 								};
-			m_Board[i][j] = new Box(textureID, boxRect, number, correctNumber);
+			//to do
+			m_Board[i][j] = new Box(boxRect, number, correctNumber);
 		}
 	}
 
@@ -78,7 +77,6 @@ bool Board::LoadData(LEVEL level)
 
 void Board::Draw()
 {
-	TextureManager::GetInstance()->Draw("board", Board::GetRect());
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
 			m_Board[i][j]->Draw();
@@ -88,8 +86,17 @@ void Board::Draw()
 
 
 
-void Board::Update(const int& mouseX, const int& mouseY) const
+void Board::Update(SDL_Event event) const
 {
+	int mouseX = event.motion.x, mouseY = event.motion.y;
 	if (!Board::MouseIsWithin(mouseX, mouseY)) { return; }
-
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (m_Board[i][j]->MouseIsWithin(mouseX, mouseY))
+			{
+				m_Board[i][j]->HandleEvent(event);
+			}
+		}
+	}
 }
