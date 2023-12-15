@@ -6,6 +6,9 @@
 //include all
 #include <stdio.h>
 #include "SDL.h"
+#include "Board.h"
+#include "FunctionButton.h"
+#include "Pencil.h"
 
 
 constexpr int GAME_WIDTH = 960;	
@@ -26,9 +29,7 @@ public:
 
 	void Play();
 
-	void HandleEvents();
-
-	void Update();
+	void HandleEvents(SDL_Event event);
 
 	void Render();
 	
@@ -43,11 +44,22 @@ private:
 		m_Window = nullptr;
 		m_Renderer = nullptr;
 		m_IsRunning = false;
+
+		m_Board = new Board({ 50, 50, BOARD_SIZE_IN_PX, BOARD_SIZE_IN_PX });
+		m_HintButton = new FunctionButton({ 800, 300, 60, 60 });
+		m_Pencil = new Pencil({ 800, 400, 60, 60 });
 	}
 
 	SDL_Window* m_Window;
 	SDL_Renderer* m_Renderer;
 	bool m_IsRunning;
+
+	Board* m_Board;
+	
+	FunctionButton* m_HintButton;
+
+	Pencil* m_Pencil;
+	
 
 	static Game* s_Instance;
 };

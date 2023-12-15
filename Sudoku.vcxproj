@@ -137,8 +137,10 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="FunctionButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pencil.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,15 +149,10 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="FunctionButton.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Pencil.h" />
     <ClInclude Include="TextureManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="correct_5.png" />
-    <Image Include="const_6.png" />
-    <Image Include="SudokuBKG.png" />
-    <Image Include="SudokuBoard.png" />
-    <Image Include="sudoku_icon.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

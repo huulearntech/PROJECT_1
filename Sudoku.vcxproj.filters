@@ -5,9 +5,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="EventHandler.cpp">
-      <Filter>EventHandler</Filter>
-    </ClCompile>
     <ClCompile Include="BaseObject.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -23,6 +20,11 @@
     <ClCompile Include="Button.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="FunctionButton.cpp" />
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>EventHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Pencil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">
@@ -42,9 +44,6 @@
     <ClInclude Include="Game.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="EventHandler.h">
-      <Filter>EventHandler</Filter>
-    </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -60,22 +59,14 @@
     <ClInclude Include="Button.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="sudoku_icon.bmp">
-      <Filter>Images</Filter>
-    </Image>
-    <Image Include="SudokuBoard.png">
-      <Filter>Images</Filter>
-    </Image>
-    <Image Include="SudokuBKG.png">
-      <Filter>Images</Filter>
-    </Image>
-    <Image Include="correct_5.png">
-      <Filter>Images</Filter>
-    </Image>
-    <Image Include="const_6.png">
-      <Filter>Images</Filter>
-    </Image>
+    <ClInclude Include="FunctionButton.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
+      <Filter>EventHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Pencil.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

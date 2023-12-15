@@ -20,6 +20,10 @@ bool TextureManager::Init()
     }
 
     TextureManager::LoadNumbers();
+    TextureManager::GetInstance()->Load("un_hint", "assets/un_hint.png");
+    TextureManager::GetInstance()->Load("act_hint", "assets/act_hint.png");
+    TextureManager::GetInstance()->Load("un_pencil", "assets/un_pencil.png");
+    TextureManager::GetInstance()->Load("act_pencil", "assets/act_pencil.png");
 
     return true;
 }
@@ -53,21 +57,21 @@ void TextureManager::LoadNumbers()
     std::string textureID = "";
     for (int i = 1; i <= 9; i++) {
         textureID = "const_" + std::to_string(i);
-        surface = IMG_Load((textureID + ".png").c_str());
+        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
         texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
         TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
     }
 
     for (int i = 1; i <= 9; i++) {
         textureID = "correct_" + std::to_string(i);
-        surface = IMG_Load((textureID + ".png").c_str());
+        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
         texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
         TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
     }
     
     for (int i = 1; i <= 9; i++) {
         textureID = "wrong_" + std::to_string(i);
-        surface = IMG_Load((textureID + ".png").c_str());
+        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
         texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
         TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
     }

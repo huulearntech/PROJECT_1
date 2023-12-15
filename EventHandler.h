@@ -25,13 +25,15 @@ public:
 	bool GetKeyDown(SDL_Scancode key);
 	SDL_Event m_Event;
 
+	void KeyDown();
+	void MouseTrack();
+
 private:
 	EventHandler();
 
 	Mouse* m_Mouse;
 
-	void MouseTrack();
-	void KeyDown();
+
 	void LeftMouseDown();
 
 	const Uint8* m_KeyStates;

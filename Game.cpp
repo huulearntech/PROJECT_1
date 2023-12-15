@@ -5,9 +5,6 @@
 
 #include "Game.h"
 #include "TextureManager.h"
-#include "EventHandler.h"
-#include "Button.h"
-#include "Box.h"
 
 Game* Game::s_Instance = nullptr;
 
@@ -25,7 +22,7 @@ bool Game::Init()
         GAME_WIDTH,                                         // 960 BY DEFAULT
         GAME_HEIGHT,                                        // 640 BY DEFAULT
         SDL_WINDOW_MAXIMIZED
-        // | SDL_WINDOW_RESIZABLE                           // WINDOW FLAGS, SEE SDL_WINDOW_FLAGS
+        //| SDL_WINDOW_RESIZABLE                           // WINDOW FLAGS, SEE SDL_WINDOW_FLAGS
     );
 
     if (m_Window == nullptr) {
@@ -43,7 +40,7 @@ bool Game::Init()
         return false;
     }
 
-    SDL_Surface* icon = SDL_LoadBMP("sudoku_icon.bmp");
+    SDL_Surface* icon = SDL_LoadBMP("assets/sudoku_icon.bmp");
     if (icon == nullptr) {
         SDL_Log("Error initializing Game Icon: %s; at location %s", SDL_GetError(), __FILE__);
         return false;
@@ -52,51 +49,44 @@ bool Game::Init()
     SDL_FreeSurface(icon);
 
 
-    if (!TextureManager::GetInstance()->Init() || EventHandler::GetInstance() == nullptr) 
+    if (!TextureManager::GetInstance()->Init()) 
     {
         return false;
     }
+
+    m_Board->Init(LEVEL::EASY);
 
     return m_IsRunning = true;
 }
 
 void Game::Play()
 {
-    Button* button = new Button({ 100, 100, 100, 100 });
-    Box* box = new Box({ 200, 200, 100, 100 }, 6, 6);
-
-    SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
-    SDL_RenderClear(m_Renderer);
-
     while (Game::IsRunning()) {
         //Game::HandleEvents();
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                Game::GetInstance()->Close();
-            }
-            button->HandleEvent(event);
-            button->Draw();
-            box->HandleEvent(event);
-            box->Draw();
-            Game::Update();
+            SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+            SDL_RenderClear(m_Renderer);
+
+            Game::HandleEvents(event);
+            m_Board->Draw();
+            m_HintButton->Draw();
+            m_Pencil->Draw();
             Game::Render();
         }
     }
 }
 
-void Game::HandleEvents()
+void Game::HandleEvents(SDL_Event event)
 {
-    EventHandler::GetInstance()->Listen();
-}
-void Game::Update()
-{
-    if (EventHandler::GetInstance()->GetKeyDown(SDL_SCANCODE_A)) {
-        printf("A");
+    if (event.type == SDL_QUIT) {
+        Game::GetInstance()->Close();
     }
-    //all components::Update()
-}
 
+    m_Board->HandleEvent(event);
+    m_HintButton->HandleEvent(event, m_Board);
+    m_Pencil->HandleEvent(event, m_Board);
+}
 
 void Game::Render()
 {
@@ -115,6 +105,7 @@ void Game::Close()
 void Game::Clean()
 {
     TextureManager::GetInstance()->Clean();
+    m_Board->~Board();
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
 
