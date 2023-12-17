@@ -4,19 +4,19 @@
 #define PENCIL_H_
 
 #include "Button.h"
-#include "Board.h"
+#include <string>
+
 
 class Pencil : public Button
 {
 public:
 	Pencil(SDL_Rect rect, SDL_Color selectColor, SDL_Color hoverColor) : Button(rect, selectColor, hoverColor) {}
-
 	void Draw();
 
-	void HandleEvent(SDL_Event event, Board* board);
+	void HandleEvent(SDL_Event& event);
 
 private:
-	std::string m_TextureID = "act_pencil";
+	std::string m_TextureID = "pencil_off";
 };
 
 #endif // !PENCIL_H_

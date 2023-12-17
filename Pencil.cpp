@@ -3,14 +3,14 @@
 
 void Pencil::Draw()
 {
+	if (m_Selected) m_TextureID = "pencil_on";
+	else m_TextureID = "pencil_off";
 	Button::Draw();
 	TextureManager::GetInstance()->Draw(m_TextureID, m_Rect);
 }
 
-void Pencil::HandleEvent(SDL_Event event, Board* board)
+void Pencil::HandleEvent(SDL_Event& event)
 {
-	Button::HandleEvent(event);
-	if (m_Selected && board->GetCurrentBox() != nullptr) {
-
-	}
+	if (MouseIsWithin(event.motion.x, event.motion.y) || event.type == SDL_MOUSEMOTION) Button::HandleEvent(event);
+	return;
 }

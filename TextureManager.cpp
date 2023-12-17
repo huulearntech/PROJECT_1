@@ -20,10 +20,13 @@ bool TextureManager::Init()
     }
 
     TextureManager::LoadNumbers();
-    TextureManager::GetInstance()->Load("un_hint", "assets/un_hint.png");
-    TextureManager::GetInstance()->Load("act_hint", "assets/act_hint.png");
-    TextureManager::GetInstance()->Load("un_pencil", "assets/un_pencil.png");
-    TextureManager::GetInstance()->Load("act_pencil", "assets/act_pencil.png");
+    TextureManager::GetInstance()->Load("hint_3", "assets/hint_3.png");
+    TextureManager::GetInstance()->Load("hint_2", "assets/hint_2.png");
+    TextureManager::GetInstance()->Load("hint_1", "assets/hint_1.png");
+    TextureManager::GetInstance()->Load("hint_0", "assets/hint_0.png");
+    TextureManager::GetInstance()->Load("pencil_on", "assets/pencil_on.png");
+    TextureManager::GetInstance()->Load("pencil_off", "assets/pencil_off.png");
+    TextureManager::GetInstance()->Load("board", "assets/board.png");   
 
     return true;
 }
@@ -71,6 +74,12 @@ void TextureManager::LoadNumbers()
     
     for (int i = 1; i <= 9; i++) {
         textureID = "wrong_" + std::to_string(i);
+        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
+        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
+        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
+    }
+    for (int i = 1; i <= 9; i++) {
+        textureID = "pencil_" + std::to_string(i);
         surface = IMG_Load(("assets/" + textureID + ".png").c_str());
         texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
         TextureManager::GetInstance()->m_TextureMap[textureID] = texture;

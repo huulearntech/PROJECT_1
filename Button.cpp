@@ -1,34 +1,24 @@
 #include "Button.h"
 #include "TextureManager.h"
 
-void Button::HandleEvent(SDL_Event event)
+void Button::HandleEvent(SDL_Event& event)
 {
-	switch (event.type)
-	{
-	case SDL_MOUSEBUTTONDOWN:
-		if (MouseIsWithin(event.motion.x, event.motion.y)) { m_Selected = !m_Selected; }
-		else { m_Selected = false; }
-		//break;
-	case SDL_MOUSEMOTION:
-		if (m_Hovered != MouseIsWithin(event.motion.x, event.motion.y))
-			m_Hovered = !m_Hovered;
-		break;
-	default:
-		break;
+	if (m_Hovered != MouseIsWithin(event.motion.x, event.motion.y)) m_Hovered = !m_Hovered;
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		if (m_Hovered) m_Selected = !m_Selected;
+		else m_Selected = false;
 	}
+	Update();
+}
+
+void Button::Update()
+{
+	if (m_Selected) m_CurrentColor = m_SelectColor;
+	else if (m_Hovered) m_CurrentColor = m_HoverColor;
+	else m_CurrentColor = MOUSE_OUT_COLOR;
 }
 
 void Button::Draw()
 {
-	if (m_Selected) {
-		TextureManager::GetInstance()->Draw(MOUSE_DOWN_COLOR, Button::m_Rect);
-	}
-	else if (m_Hovered)
-	{
-		TextureManager::GetInstance()->Draw(MOUSE_HOVERING_COLOR, Button::m_Rect);
-	}
-	else
-	{
-		TextureManager::GetInstance()->Draw(MOUSE_OUT_COLOR, Button::m_Rect);
-	}
+	TextureManager::GetInstance()->Draw(m_CurrentColor, Button::m_Rect);
 }

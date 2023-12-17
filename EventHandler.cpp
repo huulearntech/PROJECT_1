@@ -1,4 +1,4 @@
-#include "EventHandler.h"
+﻿#include "EventHandler.h"
 #include "Game.h"
 #include "Button.h"
 
@@ -6,16 +6,16 @@
 EventHandler* EventHandler::s_Instance = nullptr;
 
 EventHandler::EventHandler() {
-	m_Mouse = new Mouse();
 	m_KeyStates = SDL_GetKeyboardState(nullptr);
+	m_KeyClicked = false;
 }
 
 
 void EventHandler::Listen()
 {
-	//SDL_Event event;
-	while (SDL_PollEvent(&m_Event)) {
-		switch (m_Event.type)
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type)
 		{
 			case SDL_QUIT:
 				Game::GetInstance()->Close();
@@ -23,31 +23,20 @@ void EventHandler::Listen()
 			case SDL_KEYDOWN:
 				KeyDown();
 				break;
-			case SDL_MOUSEMOTION:
-				MouseTrack();
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				if (m_Event.button.button == SDL_BUTTON_LEFT) {
-					LeftMouseDown();
-				}
-				break;
 			default:
 				break;
 		}
 	}
 }
 
-void EventHandler::MouseTrack()
+int EventHandler::HandleKeyboard(SDL_Event& event)
 {
-	SDL_GetMouseState(&(m_Mouse->X), &(m_Mouse->Y));
-	printf("X: %d, Y: %d\n", m_Mouse->X, m_Mouse->Y);
+	SDL_Keycode keycode = event.key.keysym.sym;
+	if (keycode >= SDLK_1 && keycode <= SDLK_9) { return (int)(keycode - SDLK_0); }
+	else if (keycode == SDLK_DELETE || keycode == SDLK_BACKSPACE) { return 0; }
+	return -1;
 }
 
-void EventHandler::LeftMouseDown()
-{
-	printf("Left Mouse Clicked\n");
-
-}
 
 bool EventHandler::GetKeyDown(SDL_Scancode key)
 {

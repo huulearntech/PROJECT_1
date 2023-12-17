@@ -4,30 +4,31 @@
 
 #include "Button.h"
 
-
 class Box : public Button
 {
 private:
-	int m_Number;
+	int m_HoldingNumber;
 	int m_CorrectNumber;
-	bool m_IsConst;
+	bool m_IsGiven;
 	bool m_Draft[10] = { false };
 
 public:
 	Box(SDL_Rect rect, SDL_Color selectColor, SDL_Color hoverColor, int number, int correctNumber) : Button(rect, selectColor, hoverColor)
 	{
-		m_Number = number;
+		m_HoldingNumber = number;
 		m_CorrectNumber = correctNumber;
-		m_IsConst = (number == correctNumber && number != 0);
+		m_IsGiven = (number == correctNumber && number != 0);
 	}
 
 	~Box() {}
 
-	bool IsCorrect() const { return m_Number == m_CorrectNumber; }
+	bool IsCorrect() const { return m_HoldingNumber == m_CorrectNumber; }
 	bool SetNumber(int number);
-	inline int GetNumber() const { return m_Number; }
+	bool SetDraftNumber(int number);
+	inline int GetHoldingNumber() const { return m_HoldingNumber; }
 	inline int GetCorrectNumber() const { return m_CorrectNumber; }
-	int HandleEvent(SDL_Event event);
+
+	int HandleEvent(SDL_Event& event);
 	void Draw();
 };
 

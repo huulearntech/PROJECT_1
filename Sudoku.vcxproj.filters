@@ -20,7 +20,7 @@
     <ClCompile Include="Button.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="FunctionButton.cpp" />
+    <ClCompile Include="HintButton.cpp" />
     <ClCompile Include="EventHandler.cpp">
       <Filter>EventHandler</Filter>
     </ClCompile>
@@ -59,13 +59,16 @@
     <ClInclude Include="Button.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="FunctionButton.h">
+    <ClInclude Include="HintButton.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="EventHandler.h">
       <Filter>EventHandler</Filter>
     </ClInclude>
     <ClInclude Include="Pencil.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

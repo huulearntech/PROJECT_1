@@ -1,10 +1,10 @@
 
-
 // This is the Main Engine for the Sudoku Game
 // Created in Dec 2 2023 for Project 1 by Trinh Phuc Huu 20215596 SOICT HUST VN
 
 #include "Game.h"
 #include "TextureManager.h"
+#include "EventHandler.h"
 
 Game* Game::s_Instance = nullptr;
 
@@ -22,11 +22,12 @@ bool Game::Init()
         GAME_WIDTH,                                         // 960 BY DEFAULT
         GAME_HEIGHT,                                        // 640 BY DEFAULT
         SDL_WINDOW_MAXIMIZED
-        //| SDL_WINDOW_RESIZABLE                           // WINDOW FLAGS, SEE SDL_WINDOW_FLAGS
+        | SDL_WINDOW_RESIZABLE                              // WINDOW FLAGS, SEE SDL_WINDOW_FLAGS
     );
 
     if (m_Window == nullptr) {
         SDL_Log("Error initializing Game Window: %s; at location %s", SDL_GetError(), __FILE__);
+        return false;
     }
 
     m_Renderer = SDL_CreateRenderer(
@@ -62,8 +63,8 @@ bool Game::Init()
 void Game::Play()
 {
     while (Game::IsRunning()) {
-        //Game::HandleEvents();
         SDL_Event event;
+        //Game::HandleEvents(); 
         while (SDL_PollEvent(&event)) {
             SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
             SDL_RenderClear(m_Renderer);
@@ -74,6 +75,17 @@ void Game::Play()
             m_Pencil->Draw();
             Game::Render();
         }
+        m_Timer->ShowTime();
+        if (m_Board->GameOver()) {
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Game over!", Game::GetInstance()->GetWindow());
+            printf("Game over!\n");
+            Game::GetInstance()->Close();
+        }
+        if (m_Board->IsCompleted()) {
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Congratulation, you won!", Game::GetInstance()->GetWindow());
+            printf("Congratulation, you won!\n");
+            Game::GetInstance()->Close();
+        }
     }
 }
 
@@ -83,9 +95,10 @@ void Game::HandleEvents(SDL_Event event)
         Game::GetInstance()->Close();
     }
 
-    m_Board->HandleEvent(event);
     m_HintButton->HandleEvent(event, m_Board);
-    m_Pencil->HandleEvent(event, m_Board);
+    m_Pencil->HandleEvent(event);
+    m_Board->HandleEvent(event);
+    m_Board->HandleKeyboard(event, m_Pencil);
 }
 
 void Game::Render()
