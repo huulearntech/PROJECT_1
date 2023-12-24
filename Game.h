@@ -7,16 +7,14 @@
 #include <stdio.h>
 #include "SDL.h"
 #include "Board.h"
-#include "HintButton.h"
-#include "Pencil.h"
+#include "TextureManager.h"
+#include "GameControlsWrapper.h"
+#include "Numpad.h"
 #include "Timer.h"
-
 
 constexpr int GAME_WIDTH = 960;	
 constexpr int GAME_HEIGHT = 640;
 
-constexpr SDL_Color gray = { 220, 227, 237, 255 };
-constexpr SDL_Color activeGray = { 210, 218, 231, 255 };
 
 class Game
 {
@@ -33,7 +31,9 @@ public:
 
 	void Play();
 
-	void HandleEvents(SDL_Event event);
+	void HandleEvents();
+
+	void Update();
 
 	void Render();
 	
@@ -41,6 +41,7 @@ public:
 
 	void Clean();
 
+	friend class EventHandler;
 
 private:
 	Game()
@@ -50,9 +51,9 @@ private:
 		m_IsRunning = false;
 
 		m_Board = new Board({ 50, 50, BOARD_SIZE_IN_PX, BOARD_SIZE_IN_PX });
-		m_HintButton = new HintButton({ 800, 300, 60, 60 }, activeGray, gray);
-		m_Pencil = new Pencil({ 800, 400, 60, 60 }, MOUSE_DOWN_COLOR, MOUSE_HOVERING_COLOR);
-		m_Timer = new Timer();
+		m_ControlsWrapper = new GameControlsWrapper({ 800, 100, 200, 60 }, Color::light_gray, Color::dark_gray, Color::gray);
+		m_Numpad = new Numpad({ 800, 200, 180, 180 });
+		m_Timer = new Timer({ 400, 0, 72, 30 }, Color::white, Color::dark_gray, Color::gray);
 	}
 
 	SDL_Window* m_Window;
@@ -61,12 +62,11 @@ private:
 
 	Board* m_Board;
 	
-	HintButton* m_HintButton;
-
-	Pencil* m_Pencil;
+	GameControlsWrapper* m_ControlsWrapper;
 
 	Timer* m_Timer;
-	
+
+	Numpad* m_Numpad;
 
 	static Game* s_Instance;
 };

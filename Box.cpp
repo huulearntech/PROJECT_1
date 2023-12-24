@@ -1,52 +1,100 @@
 #include "Box.h"
 #include "TextureManager.h"
 
-bool Box::SetNumber(int number)
+Box::Box(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectColor, SDL_Color hoverColor, int number, int correctNumber)
+	: Button(rect, normalColor, selectColor, hoverColor)
 {
-	if (0 <= number && number <= 9) { 
+	m_HoldingNumber = number;
+	m_CorrectNumber = correctNumber;
+	m_IsGiven = (number == correctNumber && number != 0);
+	m_NumberLabel = new Label(rect, nullptr, 0.4f, 0.8f);
+	
+	if (m_IsGiven) { m_NumberLabel->SetTexture("const_" + std::to_string(number)); }
+
+	int draftBoxSize = rect.w / 3;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			SDL_Texture* texture = TextureManager::GetInstance()->GetTexture("pencil_" + std::to_string(i * 3 + j + 1));
+			m_DraftLabel[i * 3 + j] = new Label(rect, texture, 0.15f, 0.3f, (2 * j + 1) / 6.0f, (2 * i + 1) / 6.0f);
+		}
+	}
+}
+
+void Box::SetNumber(int number)
+{
+	if (!m_IsGiven && 0 <= number && number <= 9) { 
 		m_HoldingNumber = number;
-		if(number > 0) return IsCorrect();
 	}
-	return true;
 }
 
-bool Box::SetDraftNumber(int number)
+void Box::SetDraftNumber(int number)
 {
-	if(m_HoldingNumber != 0) return false;
-	if (number == 0) {
-		memset(m_Draft, false, sizeof(m_Draft));
-	}
-	else m_Draft[number] = !m_Draft[number];
-	return true;
+	if (number == 0) { memset(m_Draft, false, sizeof(m_Draft)); }
+	else if (1 <= number && number <= 9) { m_Draft[number - 1] = !m_Draft[number - 1]; }
 }
 
-int Box::HandleEvent(SDL_Event& event)
+bool Box::ShowHint()
 {
-	Button::HandleEvent(event);
-	if (m_Selected) return m_HoldingNumber;
-	return -1;
+	if (m_HoldingNumber != m_CorrectNumber) {
+		m_HoldingNumber = m_CorrectNumber;
+		return true;
+	}
+	return false;
+}
+
+void Box::Update()
+{
+	Button::Update();
+	if (!m_IsGiven) {
+		if (m_HoldingNumber == 0) m_NumberLabel->SetTexture(nullptr);
+		else {
+			if (IsCorrect()) m_NumberLabel->SetTexture("correct_" + std::to_string(m_HoldingNumber));
+			else {
+				m_NumberLabel->SetTexture("wrong_" + std::to_string(m_HoldingNumber));
+				m_CurrentColor = Color::pink;
+			}
+		}
+	}
 }
 
 void Box::Draw()
 {
 	Button::Draw();
-	std::string textureID;
 	if (m_HoldingNumber == 0) {
-		int draftSize = m_Rect.w / 3;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				if (m_Draft[i*3+j+1]) {
-					textureID = "pencil_" + std::to_string(i * 3 + j + 1);
-					TextureManager::GetInstance()->Draw(textureID, { m_Rect.x + draftSize * j, m_Rect.y + draftSize * i, draftSize, draftSize });
-				}
-			}
+		for(int i = 0; i < 9; i++){
+			if (m_Draft[i]) m_DraftLabel[i]->Draw();
 		}
 	}
 	else {
-		textureID = std::to_string(m_HoldingNumber);
-		if (m_IsGiven) textureID = "const_" + textureID;
-		else if (IsCorrect()) textureID = "correct_" + textureID;
-		else textureID = "wrong_" + textureID;
-		TextureManager::GetInstance()->Draw(textureID, m_Rect);
+		m_NumberLabel->Draw();
+	}
+}
+
+Uint16 Box::Encode() const
+{
+	Uint16 code = 0;
+	if (m_IsGiven) code = 100;
+	else code = m_HoldingNumber;
+	code += m_CorrectNumber;
+	for (int i = 0; i < 9; i++) {
+		code = (code << 1) | m_Draft[i];
+	}
+	return code;
+}
+
+void Box::Decode(Uint16 code)
+{
+	for (int i = 8; i >= 0; i--) {
+		m_Draft[i] = code & 1;
+		code >>= 1;
+	}
+	m_CorrectNumber = code % 10;
+	m_HoldingNumber = code / 10;
+	if (m_HoldingNumber == 10) {
+		m_HoldingNumber = m_CorrectNumber;
+		m_IsGiven = true;
+	}
+	else {
+		m_IsGiven = false;
 	}
 }

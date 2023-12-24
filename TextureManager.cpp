@@ -4,6 +4,7 @@
 // SDL_image.h for rendering all images, icons
 #include "SDL_image.h"
 
+
 // Game.h for Renderer usage
 #include "Game.h"
 
@@ -15,82 +16,102 @@ bool TextureManager::Init()
     int flags = IMG_INIT_JPG | IMG_INIT_PNG ;
     IMG_Init(flags);
     if ((flags & IMG_Init(flags)) != flags) {
-        printf("Failed initialize TextureManager: %s, at location: %s\n", IMG_GetError(), __FILE__);
+        printf("Failed initialize TextureManager: %s\n", IMG_GetError());
         return false;
     }
 
+    if (TTF_Init() < 0) {
+        SDL_Log(TTF_GetError());
+    }
+
+    m_Font = TTF_OpenFont("font/Roboto-Regular.ttf", 60);
+
     TextureManager::LoadNumbers();
-    TextureManager::GetInstance()->Load("hint_3", "assets/hint_3.png");
-    TextureManager::GetInstance()->Load("hint_2", "assets/hint_2.png");
-    TextureManager::GetInstance()->Load("hint_1", "assets/hint_1.png");
-    TextureManager::GetInstance()->Load("hint_0", "assets/hint_0.png");
-    TextureManager::GetInstance()->Load("pencil_on", "assets/pencil_on.png");
-    TextureManager::GetInstance()->Load("pencil_off", "assets/pencil_off.png");
-    TextureManager::GetInstance()->Load("board", "assets/board.png");   
+    TextureManager::Load("hint_3", "assets/hint_3.png");
+    TextureManager::Load("hint_2", "assets/hint_2.png");
+    TextureManager::Load("hint_1", "assets/hint_1.png");
+    TextureManager::Load("hint_0", "assets/hint_0.png");
+    TextureManager::Load("pencil_on", "assets/pencil_on.png");
+    TextureManager::Load("pencil_off", "assets/pencil_off.png");
+    TextureManager::Load("eraser", "assets/eraser.png");
+    TextureManager::Load("board", "assets/board.png");   
+    TextureManager::Load("board_hidden", "assets/board2.png");   
+    TextureManager::Load("easy", "assets/easy.png");   
+    
 
     return true;
 }
 
 // Load textures of icons
-bool TextureManager::Load(std::string textureId, std::string filename)
+bool TextureManager::Load(std::string textureID, std::string filename)
 {
-    SDL_Surface* surface = IMG_Load(filename.c_str());
-    if (surface == nullptr) {
-        SDL_Log("Failed loading surface: %s, %s\n", filename.c_str(), SDL_GetError());
-        return false;
-    }
-
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
-    if (texture == nullptr) {
-        SDL_Log("Failed create texture from surface: %s, %s\n", filename.c_str(), SDL_GetError());
-        return false;
-    }
-
-    m_TextureMap[textureId] = texture;
-    SDL_FreeSurface(surface);
-
-    return true;
+    m_TextureMap[textureID] = IMG_LoadTexture(Game::GetInstance()->GetRenderer(), filename.c_str());
+    return m_TextureMap[textureID] != nullptr;
 }
 
-// Load all numbers of categories: const, correct, wrong
+// Load all numbers of categories: const, correct, wrong, pencil
 void TextureManager::LoadNumbers()
 {
-    SDL_Surface* surface = nullptr;
-    SDL_Texture* texture = nullptr;
-    std::string textureID = "";
     for (int i = 1; i <= 9; i++) {
-        textureID = "const_" + std::to_string(i);
-        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
-        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
-        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
-    }
+        std::string str_num = std::to_string(i);
 
-    for (int i = 1; i <= 9; i++) {
-        textureID = "correct_" + std::to_string(i);
-        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
-        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
-        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
+        // Load const
+        TextureManager::GetInstance()->m_TextureMap["const_" + str_num]
+            = CreateTextureFromString(str_num, Color::gray_blue);
+        
+        // Load correct
+        TextureManager::GetInstance()->m_TextureMap["correct_" + str_num]
+            = CreateTextureFromString(str_num, Color::blue);
+
+        // Load wrong
+        TextureManager::GetInstance()->m_TextureMap["wrong_" + str_num]
+            = CreateTextureFromString(str_num, Color::red);
+
+        // Load pencil
+        TextureManager::GetInstance()->m_TextureMap["pencil_" + str_num]
+            = CreateTextureFromString(str_num, Color::pencil_gray);
+
     }
-    
-    for (int i = 1; i <= 9; i++) {
-        textureID = "wrong_" + std::to_string(i);
-        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
-        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
-        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
-    }
-    for (int i = 1; i <= 9; i++) {
-        textureID = "pencil_" + std::to_string(i);
-        surface = IMG_Load(("assets/" + textureID + ".png").c_str());
-        texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
-        TextureManager::GetInstance()->m_TextureMap[textureID] = texture;
-    }
-    SDL_FreeSurface(surface);
 }
 
-// Draw numbers, icons
+SDL_Texture* TextureManager::CreateTextureFromString(std::string text, SDL_Color textColor)
+{
+    SDL_Surface* surface = TTF_RenderText_Blended(m_Font, text.c_str(), textColor);
+    if (surface == nullptr) return nullptr;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::GetInstance()->GetRenderer(), surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
+
+
+void TextureManager::Draw(SDL_Texture* texture, SDL_Rect destRect)
+{
+    if (texture != nullptr) {
+        SDL_RenderCopy(Game::GetInstance()->GetRenderer(), texture, nullptr, &destRect);
+    }
+}
+//
+//void TextureManager::Draw(SDL_Texture* texture, SDL_Rect destRect, float scaleX = 1, float scaleY = 1)
+//{
+//    if (scaleX != 1.0f || scaleY != 1.0f) {
+//        SDL_Rect rect = { destRect.x + (int)(destRect.w * (0.5f - scaleX)),
+//            destRect.y + (int)(destRect.h * (0.5f - scaleY)),
+//            (int)(destRect.w * scaleX),
+//            (int)(destRect.h * scaleY),
+//        };
+//        SDL_RenderCopy(Game::GetInstance()->GetRenderer(), texture, nullptr, &rect);
+//    }
+//    else {
+//        SDL_RenderCopy(Game::GetInstance()->GetRenderer(), texture, nullptr, &destRect);
+//    }
+//}
+
+// Draw numbers, icons, labels
 void TextureManager::Draw(std::string textureId, SDL_Rect destRect)
 {
-    SDL_RenderCopy(Game::GetInstance()->GetRenderer(), m_TextureMap[textureId], nullptr, &destRect);
+    if (textureId != "") {
+        SDL_RenderCopy(Game::GetInstance()->GetRenderer(), m_TextureMap[textureId], nullptr, &destRect);
+    }
 }
 
 // Draw backgrounds
@@ -111,6 +132,8 @@ void TextureManager::Clean()
     m_TextureMap.clear();
     printf("All textures cleaned!");
 
-    // Free IMG
+    // Free IMG & TTF
     IMG_Quit();
+    TTF_CloseFont(m_Font);
+    TTF_Quit();
 }

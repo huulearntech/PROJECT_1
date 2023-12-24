@@ -3,29 +3,33 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-#include <iostream>
-#include "BaseObject.h"
+#include "Button.h"
 
-class Timer
+class Timer : public Button
 {
 public:
-	Timer() {
-		m_CurrentTime = m_StartTime = SDL_GetTicks();
+	Timer(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectColor, SDL_Color hoverColor);
+
+	void Draw();
+
+	void Update();
+
+
+	inline Uint32 GetTime() const { return m_ElapsedTime; }
+	
+	void IncreaseTime();
+
+	inline void Reset() {
+		m_StartTime = SDL_GetTicks();
 		m_ElapsedTime = 0;
 	}
 
-	void ShowTime() {
-		m_CurrentTime = SDL_GetTicks();
-		if ((m_CurrentTime - m_StartTime) / 1000 != m_ElapsedTime) {
-			m_ElapsedTime = (m_CurrentTime - m_StartTime) / 1000;
-			std::cout << m_ElapsedTime << '\n';
-		}
-	}
 
 private:
 	Uint32 m_StartTime;
-	Uint32 m_CurrentTime;
 	Uint32 m_ElapsedTime;
+
+	SDL_Texture* m_Texture;
 };
 
 #endif // !TIMER_H_

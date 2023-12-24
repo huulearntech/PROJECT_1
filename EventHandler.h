@@ -5,24 +5,21 @@
 
 #include "SDL.h"
 #include "Board.h"
-#include "Pencil.h"
+#include "GameControlsWrapper.h"
+#include "Numpad.h"
 
 class EventHandler
 {
 public:
-	static EventHandler* GetInstance() {
-		return s_Instance = (s_Instance != nullptr) ? s_Instance : new EventHandler();
-	}
+	static EventHandler* GetInstance() { return s_Instance = (s_Instance != nullptr) ? s_Instance : new EventHandler(); }
 
 	void Listen();
-	bool GetKeyDown(SDL_Scancode key);
-	void KeyDown();
-	int HandleKeyboard(SDL_Event& event);
-	bool m_KeyClicked;
+
+	void HandleEvent(SDL_Event& event, Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad);
+	void Update(Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad);
 
 private:
-	EventHandler();
-	const Uint8* m_KeyStates;
+	EventHandler() {}
 	static EventHandler* s_Instance;
 
 

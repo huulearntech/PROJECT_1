@@ -134,24 +134,33 @@
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardWrapper.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="FillNumber.cpp" />
+    <ClCompile Include="GameControlsWrapper.cpp" />
     <ClCompile Include="HintButton.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Label.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pencil.cpp" />
+    <ClCompile Include="Numpad.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="BoardWrapper.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="FillNumber.h" />
+    <ClInclude Include="GameControlsWrapper.h" />
     <ClInclude Include="HintButton.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Pencil.h" />
+    <ClInclude Include="Label.h" />
+    <ClInclude Include="Numpad.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

@@ -9,15 +9,14 @@ protected:
 	SDL_Rect m_Rect;
 
 public:
-	BaseObject(SDL_Rect rect) {
-		m_Rect = rect;
-	}
+	BaseObject(SDL_Rect rect,
+		float relW = 1,
+		float relH = 1,
+		float relX = 0.5f,
+		float relY = 0.5f,
+		bool orgAtCenter = true);
 
-	inline void SetRect(SDL_Rect rect) { m_Rect = rect; }
-	inline SDL_Rect GetRect() const { return m_Rect; }
 	bool MouseIsWithin(const int& x, const int& y) const;
-	
-	virtual void Draw() = 0;
 };
 
 #endif // !BASE_OBJECT_H_

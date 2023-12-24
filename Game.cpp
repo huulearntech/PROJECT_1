@@ -11,7 +11,7 @@ Game* Game::s_Instance = nullptr;
 bool Game::Init()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) { 
-        SDL_Log("Error initializing SDL: %s; at location %s", SDL_GetError(), __FILE__);
+        SDL_Log("Error initializing SDL: %s", SDL_GetError());
         return false;
     }
 
@@ -26,7 +26,7 @@ bool Game::Init()
     );
 
     if (m_Window == nullptr) {
-        SDL_Log("Error initializing Game Window: %s; at location %s", SDL_GetError(), __FILE__);
+        SDL_Log("Error initializing Game Window: %s", SDL_GetError());
         return false;
     }
 
@@ -37,13 +37,13 @@ bool Game::Init()
     );
 
     if (m_Renderer == nullptr) {
-        SDL_Log("Error initializing Game Renderer: %s; at location %s", SDL_GetError(), __FILE__);
+        SDL_Log("Error initializing Game Renderer: %s", SDL_GetError());
         return false;
     }
 
     SDL_Surface* icon = SDL_LoadBMP("assets/sudoku_icon.bmp");
     if (icon == nullptr) {
-        SDL_Log("Error initializing Game Icon: %s; at location %s", SDL_GetError(), __FILE__);
+        SDL_Log("Error initializing Game Icon: %s", SDL_GetError());
         return false;
     }
     SDL_SetWindowIcon(m_Window, icon);
@@ -55,58 +55,50 @@ bool Game::Init()
         return false;
     }
 
-    m_Board->Init(LEVEL::EASY);
-
+    m_Board->Init(Level::easy);
+    
     return m_IsRunning = true;
 }
 
 void Game::Play()
 {
     while (Game::IsRunning()) {
-        SDL_Event event;
-        //Game::HandleEvents(); 
-        while (SDL_PollEvent(&event)) {
-            SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
-            SDL_RenderClear(m_Renderer);
-
-            Game::HandleEvents(event);
-            m_Board->Draw();
-            m_HintButton->Draw();
-            m_Pencil->Draw();
-            Game::Render();
-        }
-        m_Timer->ShowTime();
-        if (m_Board->GameOver()) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Game over!", Game::GetInstance()->GetWindow());
-            printf("Game over!\n");
-            Game::GetInstance()->Close();
-        }
-        if (m_Board->IsCompleted()) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Congratulation, you won!", Game::GetInstance()->GetWindow());
-            printf("Congratulation, you won!\n");
-            Game::GetInstance()->Close();
-        }
+        Game::HandleEvents();
+        Game::Update();
+        Game::Render();
     }
 }
 
-void Game::HandleEvents(SDL_Event event)
+void Game::HandleEvents()
 {
-    if (event.type == SDL_QUIT) {
-        Game::GetInstance()->Close();
+    if (m_Board->GameOver()) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Game over!", Game::GetInstance()->GetWindow());
+        Game::Close();
     }
+    if (m_Board->IsCompleted()) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Congratulation, you won!", Game::GetInstance()->GetWindow());
+        Game::Close();
+    }
+    EventHandler::GetInstance()->Listen();
+}
 
-    m_HintButton->HandleEvent(event, m_Board);
-    m_Pencil->HandleEvent(event);
-    m_Board->HandleEvent(event);
-    m_Board->HandleKeyboard(event, m_Pencil);
+void Game::Update()
+{
+    EventHandler::GetInstance()->Update(m_Board, m_ControlsWrapper, m_Numpad);
+    m_Board->Update();
+    m_ControlsWrapper->Update();
+    m_Numpad->Update();
+    m_Timer->Update();
 }
 
 void Game::Render()
 {
-    //SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
-    //SDL_RenderClear(m_Renderer);
-    //Here means do something with renderer base on Event
-    //Board::Draw();
+    SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+    SDL_RenderClear(m_Renderer);
+    m_Board->Draw();
+    m_ControlsWrapper->Draw();
+    m_Numpad->Draw();
+    m_Timer->Draw();
     SDL_RenderPresent(m_Renderer);
 }
 
@@ -118,7 +110,6 @@ void Game::Close()
 void Game::Clean()
 {
     TextureManager::GetInstance()->Clean();
-    m_Board->~Board();
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
 
