@@ -5,7 +5,7 @@ GameControlsWrapper::GameControlsWrapper(SDL_Rect rect, SDL_Color normalColor, S
 	SDL_Rect pencilRect = { rect.x, rect.y, rect.h, rect.h };
 	SDL_Rect eraserRect = { rect.x + 70, rect.y, rect.h, rect.h };
 	SDL_Rect hintRect = { rect.x + 140, rect.y, rect.h, rect.h };
-	m_Pencil = new Button(pencilRect, normalColor, selectColor, hoverColor);
+	m_Pencil = new PencilButton(pencilRect, normalColor, selectColor, hoverColor);
 	m_Eraser = new Button(eraserRect, normalColor, selectColor, hoverColor);
 	m_Hint = new HintButton(hintRect, normalColor, selectColor, hoverColor);
 	m_State = 0;
