@@ -14,9 +14,11 @@ public:
 	Numpad(SDL_Rect rect);
 
 	int GetNumber();
-
+	void Init(int boardState);
 	void HandleMouseDown(SDL_Event& event);
+	void HandleMouseUp();
 	void HandleMouseMotion(SDL_Event& event);
+	void SetRemainNumbers(int boardState);
 	void Draw();
 	void Update();
 

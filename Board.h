@@ -33,21 +33,25 @@ private:
 	int m_CurrRow;
 	int m_CurrCol;
 
-	int m_WrongTimesLeft;
+	int m_MistakeCount;
 
-	SDL_Texture* m_Label;
 	bool m_IsHidden;
+	bool m_MakeMistake;
 	std::string m_TextureID;
+
+	int m_State;
 
 public:	
 	Board(SDL_Rect rect) : BaseObject(rect)	{
 		m_CurrRow = m_CurrCol = UNDEFINED; 
-		m_WrongTimesLeft = 3;
-		m_Label = nullptr;
+		m_MistakeCount = 0;
 		m_IsHidden = false;
 		m_TextureID = "board";
+		m_MakeMistake = false;
+
+		m_State = 999999999;
 	}
-	bool Init(std::string level);
+	//bool Init(std::string level);
 	bool LoadData(std::string filepath);
 	void HandleMouseDown(SDL_Event& event);
 	void HandleMouseMotion(SDL_Event& event);
@@ -57,13 +61,18 @@ public:
 		return nullptr;
 	}
 
+	void SetNumber(int number);
+	inline int GetMistakeCount() const { return m_MistakeCount; }
+	inline bool MakeMistake() const { return m_MakeMistake; }
 	inline void SetHidden(bool hidden) { m_IsHidden = hidden; }
+	inline bool IsHidden() const { return m_IsHidden; }
 
+	void Highlight();
 	void Update();
 	void Draw();
-	bool IsCompleted();
-	bool GameOver() const { return m_WrongTimesLeft <= 0; }
-};
+	void Reset();
 
+	inline int GetState() const { return m_State; }
+};
 
 #endif // !BOARD_H_

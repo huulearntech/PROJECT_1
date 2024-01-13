@@ -6,7 +6,7 @@ GameControlsWrapper::GameControlsWrapper(SDL_Rect rect, SDL_Color normalColor, S
 	SDL_Rect eraserRect = { rect.x + 70, rect.y, rect.h, rect.h };
 	SDL_Rect hintRect = { rect.x + 140, rect.y, rect.h, rect.h };
 	m_Pencil = new PencilButton(pencilRect, normalColor, selectColor, hoverColor);
-	m_Eraser = new Button(eraserRect, normalColor, selectColor, hoverColor);
+	m_Eraser = new EraserButton(eraserRect, normalColor, selectColor, hoverColor);
 	m_Hint = new HintButton(hintRect, normalColor, selectColor, hoverColor);
 	m_State = 0;
 }
@@ -31,6 +31,12 @@ void GameControlsWrapper::HandleMouseMotion(SDL_Event& event)
 	m_Hint->HandleMouseMotion(event);
 }
 
+void GameControlsWrapper::HandleMouseUp()
+{
+	m_Eraser->SetSelect(false);
+	m_Hint->SetSelect(false);
+}
+
 void GameControlsWrapper::Draw()
 {
 	m_Pencil->Draw();
@@ -41,7 +47,6 @@ void GameControlsWrapper::Draw()
 void GameControlsWrapper::Update()
 {
 	m_Pencil->Update();
-	m_Eraser->SetSelect(false);
 	m_Eraser->Update();
 	m_Hint->Update();
 }

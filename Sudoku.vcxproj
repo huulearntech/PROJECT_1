@@ -110,7 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -137,30 +137,35 @@
     <ClCompile Include="BoardWrapper.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ChooseLevelPage.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FillNumber.cpp" />
     <ClCompile Include="GameControlsWrapper.cpp" />
     <ClCompile Include="HintButton.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Numpad.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractPage.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardWrapper.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ChooseLevelPage.h" />
+    <ClInclude Include="EraserButton.h" />
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="FillNumber.h" />
     <ClInclude Include="GameControlsWrapper.h" />
     <ClInclude Include="HintButton.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Label.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Numpad.h" />
+    <ClInclude Include="PencilButton.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

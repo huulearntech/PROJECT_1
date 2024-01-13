@@ -7,7 +7,7 @@ Box::Box(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectColor, SDL_Color 
 	m_HoldingNumber = number;
 	m_CorrectNumber = correctNumber;
 	m_IsGiven = (number == correctNumber && number != 0);
-	m_NumberLabel = new Label(rect, nullptr, 0.4f, 0.8f);
+	m_NumberLabel = new Texture(rect, nullptr, 0.4f, 0.8f);
 	
 	if (m_IsGiven) { m_NumberLabel->SetTexture("const_" + std::to_string(number)); }
 
@@ -15,7 +15,7 @@ Box::Box(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectColor, SDL_Color 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			SDL_Texture* texture = TextureManager::GetInstance()->GetTexture("pencil_" + std::to_string(i * 3 + j + 1));
-			m_DraftLabel[i * 3 + j] = new Label(rect, texture, 0.15f, 0.3f, (2 * j + 1) / 6.0f, (2 * i + 1) / 6.0f);
+			m_DraftLabel[i * 3 + j] = new Texture(rect, texture, 0.15f, 0.3f, (2 * j + 1) / 6.0f, (2 * i + 1) / 6.0f);
 		}
 	}
 }
@@ -77,7 +77,7 @@ Uint16 Box::Encode() const
 	else code = m_HoldingNumber;
 	code += m_CorrectNumber;
 	for (int i = 0; i < 9; i++) {
-		code = (code << 1) | m_Draft[i];
+		code = (code << 1) | (int)m_Draft[i];
 	}
 	return code;
 }

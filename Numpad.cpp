@@ -18,6 +18,14 @@ int Numpad::GetNumber() {
 	return -1;
 }
 
+void Numpad::Init(int boardState)
+{
+	for (int i = 0; i <= 8; i++) {
+		m_Numpad[i]->SetRemain(boardState % 10);
+		boardState /= 10;
+	}
+}
+
 void Numpad::HandleMouseDown(SDL_Event& event)
 {
 	if (Numpad::MouseIsWithin(event.motion.x, event.motion.y)) {
@@ -27,10 +35,25 @@ void Numpad::HandleMouseDown(SDL_Event& event)
 	}
 }
 
+void Numpad::HandleMouseUp()
+{
+	for (int i = 0; i < 9; i++) {
+		m_Numpad[i]->SetSelect(false);
+	}
+}
+
 void Numpad::HandleMouseMotion(SDL_Event& event)
 {
 	for (int i = 0; i < 9; i++) {
 		m_Numpad[i]->HandleMouseMotion(event);
+	}
+}
+
+void Numpad::SetRemainNumbers(int boardState)
+{
+	for (int i = 0; i <= 8; i++) {
+		m_Numpad[i]->SetRemain(boardState % 10);
+		boardState /= 10;
 	}
 }
 

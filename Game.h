@@ -6,11 +6,12 @@
 //include all
 #include <stdio.h>
 #include "SDL.h"
-#include "Board.h"
 #include "TextureManager.h"
 #include "GameControlsWrapper.h"
+#include "BoardWrapper.h"
 #include "Numpad.h"
 #include "Timer.h"
+#include "ChooseLevelPage.h"
 
 constexpr int GAME_WIDTH = 960;	
 constexpr int GAME_HEIGHT = 640;
@@ -49,24 +50,23 @@ private:
 		m_Window = nullptr;
 		m_Renderer = nullptr;
 		m_IsRunning = false;
-
-		m_Board = new Board({ 50, 50, BOARD_SIZE_IN_PX, BOARD_SIZE_IN_PX });
-		m_ControlsWrapper = new GameControlsWrapper({ 800, 100, 200, 60 }, Color::light_gray, Color::dark_gray, Color::gray);
-		m_Numpad = new Numpad({ 800, 200, 180, 180 });
-		m_Timer = new Timer({ 400, 0, 72, 30 }, Color::white, Color::dark_gray, Color::gray);
+		m_ControlsWrapper = nullptr;
+		m_Numpad = nullptr;
+		m_BoardWrapper = nullptr;
+		m_ChooseLevelPage = nullptr;
 	}
 
 	SDL_Window* m_Window;
 	SDL_Renderer* m_Renderer;
 	bool m_IsRunning;
 
-	Board* m_Board;
+	BoardWrapper* m_BoardWrapper;
 	
 	GameControlsWrapper* m_ControlsWrapper;
 
-	Timer* m_Timer;
-
 	Numpad* m_Numpad;
+
+	ChooseLevelPage* m_ChooseLevelPage;
 
 	static Game* s_Instance;
 };

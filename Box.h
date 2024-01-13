@@ -3,7 +3,7 @@
 #define BOX_H_
 
 #include "Button.h"
-#include "Label.h"
+#include "Texture.h"
 
 class Box : public Button
 {
@@ -12,9 +12,9 @@ private:
 	int m_CorrectNumber;
 	bool m_IsGiven;
 	std::string m_TextureID;
-	Label* m_NumberLabel;
+	Texture* m_NumberLabel;
 	bool m_Draft[9] = { false };
-	Label* m_DraftLabel[9] = { nullptr };
+	Texture* m_DraftLabel[9] = { nullptr };
 
 public:
 	Box(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectColor, SDL_Color hoverColor, int number, int correctNumber);

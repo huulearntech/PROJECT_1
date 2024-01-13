@@ -1,19 +1,19 @@
 #pragma once
 
-#ifndef LABEL_H_
-#define LABEL_H_
+#ifndef TEXTURE_H_
+#define TEXTURE_H_
 
 #include "BaseObject.h"
 #include <string>
 
-class Label : public BaseObject
+class Texture : public BaseObject
 {
 private:
 	SDL_Rect m_Rect;
 	SDL_Texture* m_Texture;
 
 public:
-	Label(SDL_Rect rect,
+	Texture(SDL_Rect rect,
 		SDL_Texture* texture,
 		float relW = 1,
 		float relH = 1,
@@ -24,6 +24,9 @@ public:
 	void Draw() const;
 	void SetTexture(SDL_Texture* texture) { m_Texture = texture; }
 	void SetTexture(std::string textureID);
+	void DestroyTexture();
+
+	~Texture() { DestroyTexture(); }
 };
 
-#endif // !LABEL_H_
+#endif // !TEXTURE_H_

@@ -41,21 +41,19 @@ bool Game::Init()
         return false;
     }
 
-    SDL_Surface* icon = SDL_LoadBMP("assets/sudoku_icon.bmp");
-    if (icon == nullptr) {
-        SDL_Log("Error initializing Game Icon: %s", SDL_GetError());
-        return false;
-    }
-    SDL_SetWindowIcon(m_Window, icon);
-    SDL_FreeSurface(icon);
-
-
     if (!TextureManager::GetInstance()->Init()) 
     {
         return false;
     }
 
-    m_Board->Init(Level::easy);
+    m_ChooseLevelPage = new ChooseLevelPage({ 500, 400, 200, 200 });
+    m_BoardWrapper = new BoardWrapper({ 50, 0, BOARD_SIZE_IN_PX, BOARD_SIZE_IN_PX });
+    m_ControlsWrapper = new GameControlsWrapper({ 800, 100, 200, 60 }, Color::light_gray, Color::dark_gray, Color::gray);
+    m_Numpad = new Numpad({ 800, 200, 180, 180 });   
+
+    m_BoardWrapper->Init(Level::easy);
+    m_BoardWrapper->Update();
+    m_Numpad->Init(m_BoardWrapper->GetBoard()->GetState());
     
     return m_IsRunning = true;
 }
@@ -71,34 +69,46 @@ void Game::Play()
 
 void Game::HandleEvents()
 {
-    if (m_Board->GameOver()) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Game over!", Game::GetInstance()->GetWindow());
-        Game::Close();
-    }
-    if (m_Board->IsCompleted()) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, nullptr, "Congratulation, you won!", Game::GetInstance()->GetWindow());
-        Game::Close();
-    }
     EventHandler::GetInstance()->Listen();
 }
 
 void Game::Update()
 {
-    EventHandler::GetInstance()->Update(m_Board, m_ControlsWrapper, m_Numpad);
-    m_Board->Update();
-    m_ControlsWrapper->Update();
-    m_Numpad->Update();
-    m_Timer->Update();
+    // Check game over
+    if (m_BoardWrapper->GameOver()) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game over", "You made 3 mistakes", m_Window);
+        Close();
+    }
+    
+    // Check win
+    if (m_BoardWrapper->GameComplete()) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "You won!", "Congratulation!", m_Window);
+        Close();
+    }
+
+    if (m_ChooseLevelPage->IsActivate()) {
+        m_ChooseLevelPage->Update();
+    }
+    else {
+        EventHandler::GetInstance()->Update(m_BoardWrapper, m_ControlsWrapper, m_Numpad);
+        m_BoardWrapper->Update();
+        m_ControlsWrapper->Update();
+        m_Numpad->Update();
+    }
 }
 
 void Game::Render()
 {
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
     SDL_RenderClear(m_Renderer);
-    m_Board->Draw();
-    m_ControlsWrapper->Draw();
-    m_Numpad->Draw();
-    m_Timer->Draw();
+    if (m_ChooseLevelPage->IsActivate()) {
+        m_ChooseLevelPage->Draw();
+    }
+    else {
+        m_BoardWrapper->Draw();
+        m_ControlsWrapper->Draw();
+        m_Numpad->Draw();
+    }
     SDL_RenderPresent(m_Renderer);
 }
 

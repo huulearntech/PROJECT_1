@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "Game.h"
 
-void HintButton::Draw()
+void HintButton::Draw() const
 {
 	Button::Draw();
 	TextureManager::GetInstance()->Draw(m_TextureID, m_Rect);
@@ -12,5 +12,4 @@ void HintButton::Update()
 {
 	Button::Update();
 	m_TextureID = "hint_" + std::to_string(m_HintAvailable);
-	m_Selected = false;
 }

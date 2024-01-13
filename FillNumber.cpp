@@ -6,8 +6,8 @@ FillNumber::FillNumber(SDL_Rect rect, SDL_Color normalColor, SDL_Color selectCol
 {
 	FillNumber::m_Number = number;
 	FillNumber::m_Remain = remain;
-	FillNumber::m_NumberLabel = new Label(rect, nullptr, 0.4f, 0.8f);
-	FillNumber::m_RemainLabel = new Label(rect, nullptr, 0.2f, 0.4f, 0.7f, 0, false);
+	FillNumber::m_NumberLabel = new Texture(rect, nullptr, 0.4f, 0.8f);
+	FillNumber::m_RemainLabel = new Texture(rect, nullptr, 0.2f, 0.4f, 0.7f, 0, false);
 }
 
 void FillNumber::Draw()
@@ -19,7 +19,6 @@ void FillNumber::Draw()
 
 void FillNumber::Update()
 {
-	m_Selected = false;
 	Button::Update();
 	//set label;
 	FillNumber::m_NumberLabel->SetTexture(TextureManager::GetInstance()->GetTexture("correct_" + std::to_string(m_Number)));

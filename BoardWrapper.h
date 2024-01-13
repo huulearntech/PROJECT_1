@@ -6,31 +6,36 @@
 
 #include "Board.h"
 #include "Timer.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 class BoardWrapper : BaseObject
 {
 public:
-	BoardWrapper(SDL_Rect rect) : BaseObject(rect) {
-		m_Board = new Board({ rect.x, rect.y + 100, rect.w, rect.h });
-		m_Timer = new Timer({ rect.x, rect.y, 100, 100 }, Color::white, Color::dark_gray, Color::light_gray);
-		m_LevelLabel = nullptr;
-		m_MistakeLabel = nullptr;
-	}
+	BoardWrapper(SDL_Rect rect);
 
 	bool Init(std::string level);
 
 	void HandleMouseDown(SDL_Event& event);
 	void HandleMouseMotion(SDL_Event& event);
 
+	inline Board* GetBoard() const { return m_Board; }
+
 	void Draw();
 	void Update();
+
+	inline bool GameOver() const { return m_Board->GetMistakeCount() >= m_MistakeLimit; }
+	inline bool GameComplete() const { return m_Board->GetState() == 0; }
 
 private:
 	Board* m_Board;
 	Timer* m_Timer;
-	SDL_Texture* m_LevelLabel;
-	SDL_Texture* m_MistakeLabel;
+	Texture* m_LevelLabel;
+	Texture* m_MistakeLabel;
+
+
+
+	int m_MistakeLimit;
 };
 
 #endif // !BOARDWRAPPER_H_

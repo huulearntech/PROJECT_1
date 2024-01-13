@@ -4,7 +4,7 @@
 #define EVENTHANDLER_H_
 
 #include "SDL.h"
-#include "Board.h"
+#include "BoardWrapper.h"
 #include "GameControlsWrapper.h"
 #include "Numpad.h"
 
@@ -15,8 +15,8 @@ public:
 
 	void Listen();
 
-	void HandleEvent(SDL_Event& event, Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad);
-	void Update(Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad);
+	void HandleEvent(SDL_Event& event, BoardWrapper* boardWrapper, GameControlsWrapper* controlsWrapper, Numpad* numpad);
+	void Update(BoardWrapper* boardWrapper, GameControlsWrapper* controlsWrapper, Numpad* numpad);
 
 private:
 	EventHandler() {}

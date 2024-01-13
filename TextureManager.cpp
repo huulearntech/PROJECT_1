@@ -36,8 +36,11 @@ bool TextureManager::Init()
     TextureManager::Load("eraser", "assets/eraser.png");
     TextureManager::Load("board", "assets/board.png");   
     TextureManager::Load("board_hidden", "assets/board2.png");   
-    TextureManager::Load("easy", "assets/easy.png");   
+    TextureManager::Load("timer_pause", "assets/timer_pause.png");
+    TextureManager::Load("timer_continue", "assets/timer_continue.png");
+    TextureManager::Load("logo", "assets/logo.png");
     
+    m_TextureMap["choose_level"] = TextureManager::CreateTextureFromString("Please choose level", Color::black);
 
     return true;
 }
@@ -70,8 +73,9 @@ void TextureManager::LoadNumbers()
         // Load pencil
         TextureManager::GetInstance()->m_TextureMap["pencil_" + str_num]
             = CreateTextureFromString(str_num, Color::pencil_gray);
-
     }
+    TextureManager::GetInstance()->m_TextureMap["pencil_0"]
+        = CreateTextureFromString("0", Color::pencil_gray);
 }
 
 SDL_Texture* TextureManager::CreateTextureFromString(std::string text, SDL_Color textColor)

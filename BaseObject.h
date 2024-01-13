@@ -2,6 +2,7 @@
 #define BASE_OBJECT_H_
 
 #include "SDL.h"
+#include <iostream>
 
 class BaseObject
 {
@@ -16,6 +17,7 @@ public:
 		float relY = 0.5f,
 		bool orgAtCenter = true);
 
+	inline SDL_Rect GetRect() const { return m_Rect; }
 	bool MouseIsWithin(const int& x, const int& y) const;
 };
 

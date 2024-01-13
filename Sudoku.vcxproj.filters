@@ -28,8 +28,9 @@
     <ClCompile Include="Numpad.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="BoardWrapper.cpp" />
-    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="FillNumber.cpp" />
+    <ClCompile Include="ChooseLevelPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">
@@ -37,9 +38,6 @@
     </Filter>
     <Filter Include="EventHandler">
       <UniqueIdentifier>{7e33569c-ab25-463f-b6d4-11c37602e69f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Images">
-      <UniqueIdentifier>{4d19981c-6d57-4e1e-9f98-07024ac415b4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{9cd07204-6db9-4159-97bd-4cb4e5e362e9}</UniqueIdentifier>
@@ -82,10 +80,22 @@
     <ClInclude Include="BoardWrapper.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Label.h">
+    <ClInclude Include="Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="FillNumber.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="PencilButton.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="EraserButton.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractPage.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ChooseLevelPage.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

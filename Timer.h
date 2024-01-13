@@ -4,6 +4,7 @@
 #define TIMER_H_
 
 #include "Button.h"
+#include "Texture.h"
 
 class Timer : public Button
 {
@@ -14,6 +15,11 @@ public:
 
 	void Update();
 
+	void HandleMouseDown(SDL_Event& event) {
+		if (MouseIsWithin(event.motion.x, event.motion.y)) {
+			Button::HandleMouseDown(event);
+		}
+	}
 
 	inline Uint32 GetTime() const { return m_ElapsedTime; }
 	
@@ -29,7 +35,8 @@ private:
 	Uint32 m_StartTime;
 	Uint32 m_ElapsedTime;
 
-	SDL_Texture* m_Texture;
+	Texture* m_Clock;
+	Texture* m_PauseIcon;
 };
 
 #endif // !TIMER_H_

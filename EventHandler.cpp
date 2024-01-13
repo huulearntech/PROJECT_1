@@ -15,17 +15,26 @@ void EventHandler::Listen()
 				Game::GetInstance()->Close();
 				break;
 			case SDL_MOUSEBUTTONDOWN:
+				if (Game::GetInstance()->m_ChooseLevelPage->IsActivate()) {
+					Game::GetInstance()->m_ChooseLevelPage->HandleMouseDown(event);
+				} else
 				EventHandler::HandleEvent(event,
-					Game::GetInstance()->m_Board,
+					Game::GetInstance()->m_BoardWrapper,
 					Game::GetInstance()->m_ControlsWrapper,
 					Game::GetInstance()->m_Numpad);
-				Game::GetInstance()->m_Timer->HandleMouseDown(event);
+				break;
+			case SDL_MOUSEBUTTONUP:
+				Game::GetInstance()->m_ControlsWrapper->HandleMouseUp();
+				Game::GetInstance()->m_Numpad->HandleMouseUp();
 				break;
 			case SDL_MOUSEMOTION:
-				Game::GetInstance()->m_Board->HandleMouseMotion(event);
+				if (Game::GetInstance()->m_ChooseLevelPage->IsActivate()) {
+					Game::GetInstance()->m_ChooseLevelPage->HandleMouseMotion(event);
+				}
+				else
+				Game::GetInstance()->m_BoardWrapper->HandleMouseMotion(event);
 				Game::GetInstance()->m_Numpad->HandleMouseMotion(event);
 				Game::GetInstance()->m_ControlsWrapper->HandleMouseMotion(event);
-				Game::GetInstance()->m_Timer->HandleMouseMotion(event);
 				break;
 			default:
 				break;
@@ -33,34 +42,36 @@ void EventHandler::Listen()
 	}
 }
 
-void EventHandler::HandleEvent(SDL_Event& event, Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad)
+void EventHandler::HandleEvent(SDL_Event& event, BoardWrapper* boardWrapper, GameControlsWrapper* controlsWrapper, Numpad* numpad)
 {
-	Game::GetInstance()->m_Board->HandleMouseDown(event);
-	Game::GetInstance()->m_Numpad->HandleMouseDown(event);
-	Game::GetInstance()->m_ControlsWrapper->HandleMouseDown(event);
+	boardWrapper->HandleMouseDown(event);
+	controlsWrapper->HandleMouseDown(event);
+	numpad->HandleMouseDown(event);
 }
 
-void EventHandler::Update(Board* board, GameControlsWrapper* controlsWrapper, Numpad* numpad)
+void EventHandler::Update(BoardWrapper* boardWrapper, GameControlsWrapper* controlsWrapper, Numpad* numpad)
 {
-	if (board->GetCurrentCell() == nullptr) return;
+	if (boardWrapper->GetBoard()->GetCurrentCell() == nullptr) return;
 	Uint8 mode = controlsWrapper->GetState();
 
 	if (mode & GameMode::ERASER) {
-		board->GetCurrentCell()->SetNumber(0);
-		board->GetCurrentCell()->SetDraftNumber(0);
+		boardWrapper->GetBoard()->GetCurrentCell()->SetNumber(0);
+		boardWrapper->GetBoard()->GetCurrentCell()->SetDraftNumber(0);
 	}
 	if (mode & GameMode::HINT) {
 		if (controlsWrapper->GetHintButton()->HintAvailable()) {
-			bool hintSuccess = board->GetCurrentCell()->ShowHint();
+			bool hintSuccess = boardWrapper->GetBoard()->GetCurrentCell()->ShowHint();
 			if (hintSuccess) {
 				controlsWrapper->GetHintButton()->DecreaseHint();
 			}
 		}
 	}
 	if (mode & GameMode::PENCIL) {
-		board->GetCurrentCell()->SetDraftNumber(numpad->GetNumber());
+		boardWrapper->GetBoard()->GetCurrentCell()->SetDraftNumber(numpad->GetNumber());
 	}
 	if (!mode) {
-		board->GetCurrentCell()->SetNumber(numpad->GetNumber());
+		boardWrapper->GetBoard()->SetNumber(numpad->GetNumber());
 	}
+
+	numpad->SetRemainNumbers(boardWrapper->GetBoard()->GetState());
 }
